@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="/splash.css">
+
+<title>Never Gonna Give $clientip Up</title>
+<!--
+Content:
+    Nodogsplash (NDS), by default, serves this splash page (splash.html)
+    when a client device Captive Portal Detection (CPD) process
+    attempts to send a port 80 request to the Internet.
+
+    You may either embed css in this file or use a separate .css file
+    in the same directory as this file, as demonstrated here.
+
+    It should be noted when designing a custom splash page
+    that for security reasons many CPD implementations:
+        Immediately close the browser when the client has authenticated.
+        Prohibit the use of href links.
+        Prohibit downloading of external files
+            (including .css and .js).
+        Prohibit the execution of javascript.
+
+Authentication:
+    A client is authenticated on submitting an HTTP form, method=get,
+    passing $authaction, $tok and $redir.
+
+    It is also possible to authenticate using an href link to
+    $authtarget but be aware that many device Captive Portal Detection
+    processes prohibit href links, so this method may not work with
+    all client devices.
+
+Available variables:
+    error_msg: $error_msg
+    gatewayname: $gatewayname
+    tok: $tok
+    redir: $redir
+    authaction: $authaction
+    denyaction: $denyaction
+    authtarget: $authtarget
+    clientip: $clientip
+    clientmac: $clientmac
+    clientupload: $clientupload
+    clientdownload: $clientdownload
+    gatewaymac: $gatewaymac
+    nclients: $nclients
+    maxclients: $maxclients
+    uptime: $uptime
+
+Additional Variables that can be passed back via the HTTP get,
+or appended to the query string of the authtarget link:
+    username
+    password
+-->
+
+</head>
+
+
+
+<body>
+    <h1>Never Gonna Give $clientip Up</h1>
+    <video id="video" autoplay loop controls>
+        <source src="nevergonnagiveyouup.mp4" type="video/mp4">
+        你的浏览器不支持 video 标签。
+    </video>
+    <br />
+    <p id="hint">15 秒后可开始上网</p>
+    <form id="authform" method="get" action="$authaction" hidden>
+        <input type="hidden" name="tok" value="$tok">
+        <input type="hidden" name="redir" value="$redir">
+        <input type="submit" value="开始上网">
+    </form>
+    </div></div>
+</body>
+<script type="text/javascript">
+    // play video for 15s, lengthen if paused
+    const video = document.getElementById('video');
+    const authform = document.getElementById('authform');
+    const hint = document.getElementById('hint')
+    let currentSecondsLeft = 15;
+    video.addEventListener('pause', () => {
+        currentSecondsLeft += 10;
+    });
+    let interval = window.setInterval(() => {
+        if (currentSecondsLeft == 1) {
+            authform.removeAttribute('hidden');
+            window.clearInterval(interval);
+            hint.innerHTML = "请点击下方按钮：";
+        } else {
+            if (video.currentTime > 0 && !video.paused && !video.ended) {
+                currentSecondsLeft--;
+                hint.innerText = currentSecondsLeft + " 秒后可开始上网"
+            }
+        }
+    }, 1000);
+</script>
+</html>
